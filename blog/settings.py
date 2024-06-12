@@ -119,34 +119,3 @@ CSRF_TRUSTED_ORIGINS = [i.strip() for i in os.getenv(
 
 POSTS_VIEW_NUM = 10
 LIKES_VIEW_NUM = 6
-
-Path('logs/').mkdir(exist_ok=True)
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'log_file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/main.log',
-            'maxBytes': 5 * 1024 * 1024,  # 5 MB
-            'backupCount': 5,
-            'formatter': 'verbose',
-            'level': 'WARNING',
-        },
-    },
-    'formatters': {
-        'verbose': {
-            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        },
-        'loggers': {
-            'django.request': {
-                'handlers': ['log_file'],
-                'level': 'ERROR',
-                'propagate': False,
-            },
-        },
-        'root': {
-            'handlers': ['log_file'],
-        },
-    }
-}
