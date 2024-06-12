@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}
+  Профайл пользователя
+  {% if author.get_full_name %}
+    {{ author.get_full_name }}
+  {% else %}
+    {{ author.username }}
+  {% endif %}
+{% endblock %}
+{% block content %}
+  <div class="mb-5">
+    <h1>
+      Профиль пользователя
+      {% if author.get_full_name %}
+        {{ author.get_full_name }}
+      {% else %}
+        {{ author.username }}
+      {% endif %}
+    </h1>
+    <ul class="list-group list-group-horizontal-sm mb-2">
+      <li class="list-group-item">Публикации: {{ author.posts.count }}</li>
+      <a class="link-primary list-group-item"
+         href="{% url 'posts:profile_group_list' author.username %}">Группы: {{ groups_count }}</a>
+      <a class="link-primary list-group-item"
+         href="{% url 'posts:profile_followers' author.username %}">Подписчики: {{ author.following.count }}</a>
+      <a class="link-primary list-group-item"
+         href="{% url 'posts:profile_followings' author.username %}">Подписки: {{ author.follower.count }}</a>
+    </ul>
+    {% if user != author %}
+      {% if following %}
+        <a class="btn btn-lg btn-secondary"
+           href="{% url 'posts:profile_unfollow' author.username %}"
+           role="button">Отписаться</a>
+      {% else %}
+        <a class="btn btn-lg btn-primary"
+           href="{% url 'posts:profile_follow' author.username %}"
+           role="button">Подписаться</a>
+      {% endif %}
+    {% endif %}
+  </div>
+  {% for post in page_obj %}
+    {% include 'posts/includes/article.html' %}
+  {% endfor %}
+  {% include 'posts/includes/paginator.html' %}
+{% endblock %}

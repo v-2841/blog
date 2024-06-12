@@ -1,0 +1,116 @@
+{% load static %}
+{% load user_filters %}
+{% with request.resolver_match.view_name as view_name %}
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light"
+         style="background-color: lightskyblue">
+      <div class="container-fluid ps-5 pe-5" style="max-width:1080px;">
+        <a class="navbar-brand" href="{% url 'posts:index' %}">
+          <img src="{% static 'img/logo.png' %}"
+               width="30"
+               height="30"
+               class="d-inline-block align-top"
+               alt="" />
+          blog
+        </a>
+        <button class="navbar-toggler mb-1 mt-1"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav nav-pills nav-fill">
+            <li class="nav-item mb-1 mt-1 ms-1 me-1">
+              <a class="nav-link {% if view_name == 'posts:index' %}active{% endif %}"
+                 href="{% url 'posts:index' %}"><span style="color: white">Лента</span></a>
+            </li>
+            <li class="nav-item mb-1 mt-1 ms-1 me-1">
+              <a class="nav-link {% if view_name == 'posts:groups_list' %}active{% endif %}"
+                 href="{% url 'posts:groups_list' %}"><span style="color: white">Группы</span></a>
+            </li>
+            <li class="nav-item mb-1 mt-1 ms-1 me-1">
+              <a class="nav-link {% if view_name == 'about:author' %}active{% endif %}"
+                 href="{% url 'about:author' %}"><span style="color: white">Об авторе</span></a>
+            </li>
+            <li class="nav-item mb-1 mt-1 ms-1 me-1">
+              <a class="nav-link {% if view_name == 'about:tech' %}active{% endif %}"
+                 href="{% url 'about:tech' %}"><span style="color: white">Технологии</span></a>
+            </li>
+            <li class="nav-item dropdown mb-1 mt-1 ms-1 me-1">
+              <!-- dropend вместо dropdown чтобы вправо -->
+              <a href="#"
+                 class="nav-link dropdown-toggle {% if view_name == 'posts:post_search' %}active{% endif %}"
+                 id="navbarDrop"
+                 role="button"
+                 data-bs-toggle="dropdown"
+                 aria-expanded="false"
+                 style="color: white">Поиск</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDrop">
+                <li>
+                  <form action="{% url 'posts:post_search' %}"
+                        class="d-flex justify-content-center"
+                        method="get">
+                    <input type="search"
+                           placeholder="Искать в постах"
+                           class="form-control ms-2"
+                           style="width: 175px"
+                           name="search_text"
+                           required>
+                    <button class="btn btn-outline-primary mb-1 mt-1 ms-2 me-2">Поиск</button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="navbar-nav nav-pills nav-fill ms-auto">
+            {% if user.is_authenticated %}
+              <div class="dropdown nav-item">
+                <button type="button"
+                        style="color: white"
+                        class="nav-link dropdown-toggle {% if view_name == 'posts:profile' and author == request.user %}active{% endif %} {% if view_name == 'posts:post_create' %}active{% endif %} {% if view_name == 'posts:profile_edit' %}active{% endif %} {% if view_name == 'users:password_change_form' %}active{% endif %} {% if view_name == 'users:logout' %}active{% endif %}"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">{{ user.username }}</button>
+                <ul class="dropdown-menu dropdown-menu-end text-center ms-auto"
+                    aria-labelledby="navbarDrop">
+                  <li>
+                    <a href="{% url 'posts:profile' user.username %}"
+                       class="dropdown-item {% if view_name == 'posts:profile' and author == request.user %}active{% endif %} mb-1 mt-1">Страница пользователя</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'posts:post_create' %}"
+                       class="dropdown-item {% if view_name == 'posts:post_create' %}active{% endif %} mb-1 mt-1">Новая запись</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'posts:profile_edit' user.username %}"
+                       class="dropdown-item {% if view_name == 'posts:profile_edit' %}active{% endif %} mb-1 mt-1">Редактировать профиль</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'users:password_change_form' %}"
+                       class="dropdown-item {% if view_name == 'users:password_change_form' %}active{% endif %} mb-1 mt-1">Изменить пароль</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'users:logout' %}"
+                       class="dropdown-item {% if view_name == 'users:logout' %}active{% endif %} mb-1 mt-1">Выйти</a>
+                  </li>
+                </ul>
+              </div>
+            {% else %}
+              <li class="nav-item mb-1 mt-1 ms-1 me-1">
+                <a class="nav-link {% if view_name == 'users:login' %}active{% endif %}"
+                   href="{% url 'users:login' %}"><span style="color: white">Войти</span></a>
+              </li>
+              <li class="nav-item mb-1 mt-1 ms-1 me-1">
+                <a class="nav-link {% if view_name == 'users:signup' %}active{% endif %}"
+                   href="{% url 'users:signup' %}"><span style="color: white">Регистрация</span></a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+{% endwith %}
