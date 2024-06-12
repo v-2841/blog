@@ -43,7 +43,7 @@
 </aside>
 <article class="col-12 col-md-9">
   <br>
-  <p>{{ post.text|linebreaksbr }}</p>
+  <p>{{ post.text|safe|linebreaksbr }}</p>
   {% if post.image %}
     <div class="text-center">
       <img class="card-img mb-4 mt-4"

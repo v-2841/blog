@@ -18,7 +18,7 @@
     </h5>
   {% endif %}
   <br>
-  {{ post.text|linebreaksbr }}
+  {{ post.text|safe|linebreaksbr }}
   <br>
   {% if post.image %}
     <div class="text-center">
