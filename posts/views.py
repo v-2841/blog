@@ -9,7 +9,8 @@ from posts.utils import paginator_func
 
 
 def index(request):
-    post_list = Post.objects.all()
+    post_list = Post.objects.all().prefetch_related(
+        'author', 'group','comments', 'likes')
     page_obj = paginator_func(request, post_list)
     context = {
         'page_obj': page_obj,
@@ -19,7 +20,8 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    post_list = group.posts.all()
+    post_list = group.posts.all().prefetch_related(
+        'author', 'group', 'comments', 'likes')
     page_obj = paginator_func(request, post_list)
     memberships = Membership.objects.filter(group=group)
     administrators_count = memberships.filter(role='a').count()
@@ -175,7 +177,8 @@ def groups_list(request):
 def group_follow_index(request):
     groups = Group.objects.filter(
         members=request.user).values_list('slug', flat=True)
-    post_list = Post.objects.filter(group__slug__in=groups)
+    post_list = Post.objects.prefetch_related(
+        'author', 'group', 'comments', 'likes').filter(group__slug__in=groups)
     page_obj = paginator_func(request, post_list)
     context = {
         'page_obj': page_obj,
