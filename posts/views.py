@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 
 from posts.forms import CommentForm, GroupForm, PostForm, ProfileForm
 from posts.models import Comment, Follow, Group, Like, Membership, Post, User
-from posts.utils import get_client_ip, ip_timezone_cookie, paginator_func
+from posts.utils import paginator_func
 
 
 def index(request):
@@ -14,11 +14,7 @@ def index(request):
     context = {
         'page_obj': page_obj,
     }
-    if (request.COOKIES.get('timezone')
-       and request.COOKIES.get('ip') == get_client_ip(request)):
-        return render(request, 'posts/index.html', context)
-    else:
-        return ip_timezone_cookie(request, 'posts/index.html', context)
+    return render(request, 'posts/index.html', context)
 
 
 def group_posts(request, slug):
