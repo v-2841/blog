@@ -10,7 +10,7 @@ from posts.utils import paginator_func
 
 def index(request):
     post_list = Post.objects.all().prefetch_related(
-        'author', 'group','comments', 'likes')
+        'author', 'group', 'comments', 'likes')
     page_obj = paginator_func(request, post_list)
     context = {
         'page_obj': page_obj,
