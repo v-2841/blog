@@ -1,3 +1,8 @@
+import os
+
+from django.conf import settings
+
+
 TZ_OFFSET_TO_NAME = {
     '+14:00': 'Etc/GMT-14',
     '+13:00': 'Etc/GMT-13',
@@ -36,3 +41,11 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+def load_icu(connection, **kwargs):
+    if connection.vendor != 'sqlite':
+        return
+    connection.connection.enable_load_extension(True)
+    connection.connection.load_extension(
+        os.path.join(settings.BASE_DIR, 'libSqliteIcu.so'))
