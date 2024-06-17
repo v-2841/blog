@@ -1,5 +1,5 @@
 import os
-import sys
+import platform
 
 from django.conf import settings
 
@@ -45,7 +45,8 @@ def get_client_ip(request):
 
 
 def load_icu(connection, **kwargs):
-    if connection.vendor != 'sqlite' or sys.platform != 'linux':
+    if (connection.vendor != 'sqlite' or platform.system() != 'Linux'
+            or platform.machine() != 'x86_64'):
         return
     connection.connection.enable_load_extension(True)
     connection.connection.load_extension(
