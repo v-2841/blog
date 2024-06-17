@@ -45,7 +45,7 @@ def get_client_ip(request):
 
 
 def load_icu(connection, **kwargs):
-    if connection.vendor != 'sqlite' and sys.platform != 'linux':
+    if connection.vendor != 'sqlite' or sys.platform != 'linux':
         return
     connection.connection.enable_load_extension(True)
     connection.connection.load_extension(
